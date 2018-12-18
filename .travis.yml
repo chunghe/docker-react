@@ -1,0 +1,15 @@
+sudo: required # super user level permission for this build
+services:
+  # travis CI is going to install a copy of docker
+  - docker
+
+before_install:
+  - docker build -t chunghe/docker-react -f Dockerfile.dev .
+
+script: 
+  # command that need to be executed to actually run our test suite
+  # Travis CI is going to watch all these commands, get a returns status code
+  # if code other than zero Travis is going to assume build failed
+  # gotcha: Travis CI is goin to assume that our test suite runs and then exists automatically
+  # use -- --cover to exit automatically
+  - docker run chunghe/docker-react npm run test -- --coverage
