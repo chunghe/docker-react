@@ -13,3 +13,23 @@ script:
   # gotcha: Travis CI is goin to assume that our test suite runs and then exists automatically
   # use -- --cover to exit automatically
   - docker run chunghe/docker-react npm run test -- --coverage
+
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-1"
+  app: "docker-react"
+  # the actual app that's running inside of your it's not really referred to as an app but instaed referred to as environment
+  env: "DockerReact-env"
+  # when TravisCI decides to deploy codebase it's going to take all the files inside your github repo, zip them into one singl file, copy all them over to an s3 bucket
+  # provide the name of the bucket that TravisCI is going to put our zip file into
+  # s3 bucket is already automatically generated when initiall created the elastic beanstalk instance 
+  bucket_name: "elasticbeanstalk-ap-northeast-1-969621021291"
+  # this buet gets reused for all the different beanstalk environment that you create
+  bucket_path: "docker-react"
+  # anytime we pish code to master bracnh that's the time to dploy
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
